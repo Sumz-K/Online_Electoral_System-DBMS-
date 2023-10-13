@@ -58,16 +58,39 @@ def timetolive():
     query=f"select ttl from sessions where id={uid}"
     cursor.execute(query)
     time_str=(cursor.fetchall()[0][0])
-    
+    cur_time=datetime.datetime.now()
     if datetime.datetime.now()<time_str:
         valid={"Status":"Active"}
         return valid,200
     else:
+
         invalid={"Status":"Invalid"}
+        query=f"delete from sessions where ttl<{cur_time}"
         return invalid,302
     # dummy={"A":"B"}
     # return dummy
     
+@app.route("/fetch",methods=['GET','POST'])
+
+def getinfo():
+    data=request.get_json()
+    tkn=data["token"]
+    print(tkn)
+    query=f"""
+    SELECT d.name, d.zip, d.ward_no
+    FROM details d
+    WHERE EXISTS (SELECT id FROM sessions 
+    WHERE id = d.uid AND token = '{tkn}');
+    """
+    #query_dummy = f"select id from sessions where token='{tkn}';"
+    cursor.execute(query)
+    
+    return (cursor.fetchall()),200
+    
+
+    
+
+
     
 
 if __name__ == '__main__':
