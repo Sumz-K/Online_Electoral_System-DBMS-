@@ -1,0 +1,40 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+  
+<head> 
+    <meta charset="UTF-8" /> 
+    <meta name="viewport" content="width=device-width,  
+                     initial-scale=1.0" /> 
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" /> 
+    <title>OTP Input</title> 
+    <link  rel="stylesheet" href="{{ url_for('static', filename='opt.css') }}"/>
+</head> 
+  
+<body> 
+    <div>
+        
+        <div class="opt-container">
+          <form class="opt-form" name="myForm" action="http://127.0.0.1:5000/otp" method="post">
+            <span class="opt-text">Enter OTP</span>
+            <div class="container"> 
+                <div id="inputs" class="inputs"> 
+                    <input class="input" type="text" name="digit1"
+                        inputmode="numeric" maxlength="1" /> 
+                    <input class="input" type="text" name="digit2"
+                        inputmode="numeric" maxlength="1" /> 
+                    <input class="input" type="text" name="digit3"
+                        inputmode="numeric" maxlength="1" /> 
+                    <input class="input" type="text" name="digit4"
+                        inputmode="numeric" maxlength="1" /> 
+                </div> 
+            </div> 
+            <button type="submit" class="opt-button button" id="bid">SUBMIT</button>
+          </form>
+        </div>
+      </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script> 
+</body> 
+  
+</html> 

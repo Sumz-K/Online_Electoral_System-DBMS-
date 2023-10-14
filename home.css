@@ -1,0 +1,97 @@
+.home-container {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-image: linear-gradient(90deg, rgb(252, 0, 255) 0.00%,rgb(0, 219, 222) 100.00%);
+  }
+  .home-form {
+    top: 94px;
+    left: 0px;
+    right: 0px;
+    width: 460px;
+    height: 502px;
+    margin: auto;
+    display: flex;
+    opacity: 0.8;
+    position: absolute;
+    align-items: center;
+    border-radius: 25px;
+    justify-content: center;
+    background-color: #ffffff;
+  }
+  .home-get-otp {
+    left: 132px;
+    width: 196px;
+    bottom: 52px;
+    height: 67px;
+    position: absolute;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    transition: 0.3s;
+    border-radius: 20px;
+    background-color: #a4a4a4;
+  }
+  
+  .home-container1 {
+    flex: 0 0 auto;
+    width: 317px;
+    height: auto;
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+  }
+  .home-text3 {
+    top: -131px;
+    left: 83px;
+    position: absolute;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+  }
+  .home-container2 {
+    flex: 0 0 auto;
+    width: 317px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .home-textinput {
+    width: 317px;
+    height: 32px;
+    font-size: 20px;
+    border-top: 0;
+    border-left: 0;
+    border-color: crimson;
+    border-right: 0;
+    border-width: 5;
+    border-bottom: 5;
+  }
+  .home-textinput:active{width: 317px;
+    height: 32px;
+    font-size: 20px;
+    border-top: 0;
+    border-left: 0;
+    border-color: crimson;
+    border-right: 0;
+    border-width: 5;
+    border-bottom: 5;
+  }
+
+  .home-image {
+    top: 10px;
+    left: 0px;
+    right: 0px;
+    width: 115px;
+    height: 104px;
+    margin: auto;
+    position: absolute;
+    object-fit: cover;
+    border-width: 3px;
+    border-color: black;
+    border-radius: var(--dl-radius-radius-round);
+  }
