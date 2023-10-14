@@ -1,14 +1,14 @@
 <html>
     <head>
-        <link href="./home.css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" />
     </head>
     <body>
         <div>
             
             <div class="home-container">
-              <form method="POST" class="home-form" action="http://127.0.0.1:5000/server">
+              <form method="POST" class="home-form" action="/login">
                 <img
-      src="images/Election-Commission_Preview.png"
+      src="{{ url_for('static', filename='images/Election-Commission_Preview.png') }}"
       alt="image"
       class="home-image"/>
                 <button type="submit" id="b1" class="home-get-otp button" disabled>
