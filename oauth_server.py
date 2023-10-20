@@ -1,3 +1,4 @@
+from ctypes import resize
 from time import time
 from urllib import request
 
@@ -12,28 +13,12 @@ import datetime
 
 app=Flask(__name__)
 mysql_conn = mysql.connector.connect(
-    host = "192.168.0.103",
+    host = "192.168.0.102",
     user = "ubuntu",
     password = "pass"
 )
 cursor = mysql_conn.cursor()
 cursor.execute("use adhar;")
-
-@app.route("/login",methods=['GET','POST'])
-def login():
-    if request.method == 'POST':
-        data = request.form.get("uid",None)
-        cursor.execute("")
-
-    
-
-
-
-
-
-
-
-
 
 #App id, UID, time(current time)
 #Populate the other table 'token' : ID---> UID from details
@@ -46,35 +31,28 @@ def gettokens():
     cur_time=datetime.datetime.strptime(data["time"], '%Y-%m-%d %H:%M:%S.%f')
     #print(cur_time[0:19])
     uid=data["UID"]
-    print(uid)
-    q = "select * from details where uid = %s;"
-    v = (uid,)
-    cursor.execute(q,v)
-    see = cursor.fetchall()
-    print(see)
-    if len(see) != 0:
-        cur_time1 = str(cur_time)
-        h=hashlib.sha256()
-        h.update((cur_time1+uid).encode())
+    cur_time1 = str(cur_time)
+    h=hashlib.sha256()
+    h.update((cur_time1+uid).encode())
     
-        hashed=h.hexdigest()
+    hashed=h.hexdigest()
    
-        query="insert into sessions values(%s,%s,%s,%s)"
-        dynamic_ttl = cur_time + datetime.timedelta(minutes=3)
-        dynamic_ttl = str(dynamic_ttl)[:19]
-        values=(hashed,cur_time,dynamic_ttl,uid)
-        cursor.execute(query,values)
-        mysql_conn.commit()
-        query = 'insert into otp values(%s,%s,%s)'
-        values = (uid,random.randint(1000,9999),str(cur_time+datetime.timedelta(minutes=3))[:19])
-        cursor.execute(query,values)
-        mysql_conn.commit()
-        dummy_dict={"status":"yes"}
-        return jsonify(dummy_dict),200
-    else:
-        ret = {"status":"no"}
-        return jsonify(ret),200
+    query="insert into sessions values(%s,%s,%s,%s)"
+    dynamic_ttl = cur_time + datetime.timedelta(minutes=10)
+    dynamic_ttl = str(dynamic_ttl)[:19]
+    values=(hashed,cur_time,dynamic_ttl,uid)
+    cursor.execute(query,values)
+    mysql_conn.commit()
     
+
+    dummy_dict={"A":"B"}
+    return jsonify(dummy_dict),200
+
+def compare(lst):
+    for i in range (len(lst)):
+        lst[i]=lst[i][0]
+    
+
 
 @app.route("/check-otp",methods=['GET',"POST"])
 def otp_check():
@@ -87,10 +65,14 @@ def otp_check():
     val = (uid,)
     cursor.execute(query,val)
     val = cursor.fetchall()
-    print(val[0][0])
-    if str(val[0][0]) == str(data['otp']):
+    
+    compare(val)
+    print(val,type(val[0]))
+
+    if int(data['otp']) in val:
         return jsonify({"status":"accepted"}),200
     return jsonify({"status":"rejected"}),200
+
 
 @app.route("/toapp",methods=['GET','POST'])
 def timetolive():
@@ -134,10 +116,17 @@ def getinfo():
     return (cursor.fetchall()),200
     
 
-    
+@app.route('/printotp/<uid>',methods=['GET','POST'])
+def printotp(uid):
+    query=f"select code from otp where id={uid}"
+    cursor.execute(query)
+    res=cursor.fetchall()
+    print(res)
+    return res,200
+
 
 
     
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True)
