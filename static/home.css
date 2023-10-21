@@ -95,3 +95,7 @@
     border-color: black;
     border-radius: var(--dl-radius-radius-round);
   }
+.warn{
+  color: red;
+  font-size: 20px;
+}

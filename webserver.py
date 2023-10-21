@@ -33,7 +33,8 @@ def otp():
             response = resp.json()
             if response['status'] == "accepted":
                 return jsonify({"status":"OTP accepted"}),200
-
+            else:
+                return render_template("otp.html",error=" Invalid OTP")
     return render_template("otp.html")
 
 
@@ -57,10 +58,12 @@ def login_page():
                 redirect(url_for("otp"))
                 print(requests.get(f"http://127.0.0.1:8000/printotp/{user_id}"))
                 return resp
+            else:
+                return render_template("login.html",error=" Invalid User ID")
                 
             
             
-    return render_template("login.html")
+    return render_template("login.html",)
 
 
 @app.route("/server",methods=["GET","POST"])

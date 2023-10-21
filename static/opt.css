@@ -45,6 +45,12 @@
     border-radius: 13px;
     background-color: #8a8a8a;
   }
+  .warn{
+    font-size: 20px;
+    color: red;
+    top: 80px;
+    position: absolute;
+  }
 /* style.css */
 .container { 
     display: flex; 
