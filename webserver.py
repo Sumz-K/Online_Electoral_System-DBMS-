@@ -11,7 +11,7 @@ def otp():
     print(uid)
     if uid is None:
             redirect(url_for("login_page"))
-            return "failed"
+            return redirect(url_for("login_page"))
 
     if request.method =='POST':
         
@@ -20,9 +20,6 @@ def otp():
         n3 = request.form.get('digit3',0)
         n4 = request.form.get("digit4",0)
         opt = n1+n2+n3+n4
-        
-       
-        
         
         if len(opt)==4:
             data = {"otp" :opt,
@@ -53,8 +50,7 @@ def login_page():
             response = resp.json()
             if response['status'] == "yes":
                 resp = make_response(redirect(url_for("otp"))) 
-                resp.set_cookie('username', data["UID"])
-               
+                resp.set_cookie('username', data["UID"],max_age=3*60)
                 redirect(url_for("otp"))
                 print(requests.get(f"http://127.0.0.1:8000/printotp/{user_id}"))
                 return resp

@@ -12,7 +12,7 @@ import datetime
 
 app=Flask(__name__)
 mysql_conn = mysql.connector.connect(
-    host = "172.20.10.4",
+    host = "192.168.0.104",
     user = "ubuntu",
     password = "pass"
 )
@@ -40,6 +40,7 @@ def remove():
         time.sleep(1)
 
 t = threading.Thread(target=remove)
+t.daemon = True
 t.start()
 
 @app.route("/login",methods=['GET','POST'])
