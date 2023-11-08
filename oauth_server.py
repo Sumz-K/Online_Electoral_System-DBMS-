@@ -12,10 +12,11 @@ import datetime
 
 app=Flask(__name__)
 mysql_conn = mysql.connector.connect(
-    host = "192.168.0.105",
+    host = "192.168.0.107",
     user = "ubuntu",
     password = "pass"
 )
+app.config['SESSION_COOKIE_NAME'] = None
 cursor = mysql_conn.cursor()
 cursor.execute("use adhar;")
 
@@ -98,7 +99,16 @@ def otp_check():
         cursor.execute(f"select endpoint from key_endpoint where api_key = '{key}'")
         endpoint = cursor.fetchall()
         print(endpoint[0][0])
-        requests.post(str(endpoint[0][0]),json=data)
+        cursor.execute(f"select name, uid, dob, ward_no from details where uid = {data['uid']}")
+        res = (cursor.fetchall())
+        print("result is -->", res)
+        return_data = {
+            'name': res[0][0],
+            'uid' : res[0][1],
+            'dob' : str(res[0][2]),
+            'ward_no' : res[0][3]
+        }
+        requests.post(str(endpoint[0][0]),json=return_data)
         
         return jsonify({"status":"accepted"}),200
     return jsonify({"status":"rejected"}),200
