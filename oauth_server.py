@@ -108,9 +108,9 @@ def otp_check():
             'dob' : str(res[0][2]),
             'ward_no' : res[0][3]
         }
-        requests.post(str(endpoint[0][0]),json=return_data)
+
         
-        return jsonify({"status":"accepted"}),200
+        return jsonify({"status":"accepted", 'endpoint':endpoint[0][0]+f"/{data['uid']}"}),200
     return jsonify({"status":"rejected"}),200
 
 
@@ -123,7 +123,6 @@ def timetolive():
     # ttl=Query
     # if ttl>0 return flag
     # else return "redirect"
-
     data=request.get_json()
     uid=data["uid"]
     query=f"select ttl from sessions where id={uid}"

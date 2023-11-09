@@ -62,7 +62,7 @@ def otp():
             resp = requests.post("http://127.0.0.1:8000/check-otp",json=data)
             response = resp.json()
             if response['status'] == "accepted":
-                return redirect("http://127.0.0.1:8080/vote")
+                return redirect(response['endpoint'])
             else:
                 return render_template("otp.html",error=" Invalid OTP")
     return render_template("otp.html")
