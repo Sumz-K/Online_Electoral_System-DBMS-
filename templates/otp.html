@@ -16,7 +16,13 @@
         <div class="opt-container">
           <form class="opt-form" id = "myForm" name="myForm" action="http://127.0.0.1:5000/otp" method="post">
             <span class="opt-text">Enter OTP</span>
+            <span class = "warn">
+                {% if error %}
+                <p>&#9888;{{ error }}</p>
+                {% endif %}
+            </span>
             <div class="container"> 
+                
                 <div id="inputs" class="inputs"> 
                     <input class="input" type="text" name="digit1"
                         inputmode="numeric" maxlength="1" /> 
@@ -33,7 +39,7 @@
         </div>
       </div>
     
-    <script src="{{ url_for('static', filename='script.js') }}">
+    <script src="{{ url_for('static', filename='otp_script.js') }}">
     </script> 
 </body> 
   
