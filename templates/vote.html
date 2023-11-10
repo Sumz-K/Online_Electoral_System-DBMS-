@@ -1,5 +1,23 @@
 <!DOCTYPE html>
-    <body>
-        <h1>vote page</h1>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name-Party Pairs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .pair {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% for pair in data %}
+        <div class="pair">
+            <p><strong>Name:</strong> {{ pair[0] }}, <strong>Party:</strong> {{ pair[1] }}</p>
+        </div>
+    {% endfor %}
+</body>
 </html>
