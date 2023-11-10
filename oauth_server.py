@@ -103,14 +103,14 @@ def otp_check():
         res = (cursor.fetchall())
         print("result is -->", res)
         return_data = {
-            'name': res[0][0],
-            'uid' : res[0][1],
-            'dob' : str(res[0][2]),
-            'ward_no' : res[0][3]
+            "name": res[0][0],
+            "uid" : res[0][1],
+            "dob" : str(res[0][2]),
+            "ward_no" : res[0][3]
         }
 
         
-        return jsonify({"status":"accepted", 'endpoint':endpoint[0][0]+f"/{data['uid']}"}),200
+        return jsonify({"status":"accepted", 'endpoint':endpoint[0][0]+f"/{str(return_data)}"}),200
     return jsonify({"status":"rejected"}),200
 
 
