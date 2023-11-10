@@ -27,7 +27,8 @@ def castyourvote():
                 resp.set_cookie("authcheck",session['cookie'],max_age=300)
                 session.pop('cookie')
             else:
-                return render_template("vote.html")
+               
+                return render_template("vote.html",data=session['data_sent'])
             return resp
         else:
              return redirect(url_for("vote"))
@@ -42,6 +43,7 @@ def vote():
                 return redirect(resp.json().get("uri"))
                 
         if cook:
+                session['cookie'] = cook
                 return redirect(url_for('castyourvote'))
     
 

@@ -9,6 +9,14 @@ app.secret_key = "pass"
 def authtoken(data):
     return redirect(f"http://127.0.0.1:8080/take/{data}")
 
+@app.route("/retrieve",methods=["POST"])
+def retrieve():
+    data = request.get_json()
+    val = data['cookie']
+    
+
+
+
 @app.route("/setsession",methods=["POST"])
 def setss():
     data = request.get_json()
