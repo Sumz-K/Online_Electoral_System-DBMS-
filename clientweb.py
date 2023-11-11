@@ -15,10 +15,6 @@ def support():
 
 @app.route("/take/<val>")
 def postvote(val):
-        
-        
-        
-
         data_dict=eval(val)
         pairs = list(data_dict.items())
         print(pairs)
@@ -29,6 +25,8 @@ def postvote(val):
         print(val)
         return redirect(url_for('castyourvote'))
 
+
+
 @app.route("/castyourvote")
 def castyourvote():
         if "cookie" in session or request.cookies.get("authcheck"):
@@ -38,11 +36,22 @@ def castyourvote():
                 resp.set_cookie("authcheck",session['cookie'],max_age=300)
                 session.pop('cookie')
             else:
-               
-                return render_template("vote.html",data=session['data_sent'])
+                response = requests.post("http://127.0.0.1:9000/retrieve",json={'cookie':request.cookies.get("authcheck")})
+                if response['status'] == "not voted":
+                    return render_template("vote.html",data=session['data_sent'])
+                else:
+                    return redirect(f'/casted/{response["cookie"]}')
             return resp
         else:
              return redirect(url_for("vote"))
+
+
+@app.route("/casted/<jai>")
+def casted(jai):
+    resp = make_response(render_template("voted.html"))
+    resp.set_cookie("authcheck",jai)
+    return resp
+
 @app.route('/vote', methods=["GET","POST"])
 def vote():
     if request.method == "GET":

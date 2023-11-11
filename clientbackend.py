@@ -26,17 +26,45 @@ def authtoken(data):
     cursor.execute(query)
     res=cursor.fetchall()
     #print(res)
-    data_dict = {name: party for name, party in res}
-    final_str = json.dumps(data_dict)
-    print((final_str))
+    cursor.execute(f"select voting_status from voted where user_id = {json_data['uid']}")
+    ret = cursor.fetchall()
+    print(ret)
+    if len(ret)==0:
+        # we should send a cookie 
+        cursor.execute("LOCK tables voted write")
+        cursor.execute(f"INSERT INTO voted (user_id, voting_status) VALUES ({json_data['uid']}, 'no')")
+        cursor.execute("UNLOCK tables")
+        data_dict = {name: party for name, party in res}
+        final_str = json.dumps(data_dict)
+        print((final_str))
+        return redirect(f"http://127.0.0.1:8080/take/{final_str}")
+    elif ret[0][0] == 'no':
+        # send a cookie 
+        data_dict = {name: party for name, party in res}
+        final_str = json.dumps(data_dict)
+        print((final_str))
+        return redirect(f"http://127.0.0.1:8080/take/{final_str}")
+    else:
+        data_dict = {'cookie':"check cookie"}
+        final_str = json.dumps(data_dict)
+        print((final_str))
+        return redirect(f"http://127.0.0.1:8080/casted/{final_str}")
 
-
-    return redirect(f"http://127.0.0.1:8080/take/{final_str}")
 
 @app.route("/retrieve",methods=["POST"])
 def retrieve():
     data = request.get_json()
     val = data['cookie']
+    cursor.callproc('checkstatus', (val,))
+    for result in cursor.stored_results():
+        rows = result.fetchall()
+        for row in rows:
+            status = row
+    if status == 'no':
+        return jsonify({'status':"not voted",}),200
+    else:
+        return jsonify({"status":'Yes','cookie':'check cookie'})
+    
     
 
 
