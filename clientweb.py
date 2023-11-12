@@ -80,7 +80,10 @@ def vote():
         if cook:
                 return redirect(url_for('castyourvote'))
     
-
+@app.route("/submit_vote", methods=["POST"])
+def submit_vote():
+    data = request.form.get('voted_contestant')
+    return data
 
 @app.route('/result')
 def result():
