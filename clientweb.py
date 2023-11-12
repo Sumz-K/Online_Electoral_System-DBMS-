@@ -31,7 +31,7 @@ def postvote(val):
 def castyourvote():
         if "cookie" in session or request.cookies.get("authcheck"):
             if 'cookie' in session:
-                print(session['data_sent'])
+                # print(session['data_sent'])
                 resp = make_response(render_template("vote.html",data=session['data_sent']))
                 resp.set_cookie("authcheck",session['cookie'],max_age=300)
                 session.pop('cookie')
@@ -40,16 +40,23 @@ def castyourvote():
                 if response['status'] == "not voted":
                     return render_template("vote.html",data=session['data_sent'])
                 else:
-                    return redirect(f'/casted/{response["cookie"]}')
+                    return redirect(f'/red-casted/{response["cookie"]}')
             return resp
         else:
              return redirect(url_for("vote"))
 
 
-@app.route("/casted/<jai>")
-def casted(jai):
+@app.route("/red-casted/<jai>")
+def red_casted(jai):
+    dick = eval(jai)
+    print(dick)
+    session['cookie'] = dick['cookie']
+    
+    return redirect(url_for("casted"))
+@app.route("/casted")
+def casted():
     resp = make_response(render_template("voted.html"))
-    resp.set_cookie("authcheck",jai)
+    resp.set_cookie("authcheck",session['cookie'])
     return resp
 
 @app.route('/vote', methods=["GET","POST"])

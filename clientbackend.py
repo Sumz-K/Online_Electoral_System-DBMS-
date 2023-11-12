@@ -48,7 +48,7 @@ def authtoken(data):
         data_dict = {'cookie':"check cookie"}
         final_str = json.dumps(data_dict)
         print((final_str))
-        return redirect(f"http://127.0.0.1:8080/casted/{final_str}")
+        return redirect(f"http://127.0.0.1:8080/red-casted/{final_str}")
 
 
 @app.route("/retrieve",methods=["POST"])
