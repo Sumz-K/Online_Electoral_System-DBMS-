@@ -16,10 +16,11 @@ def support():
 @app.route("/take/<val>")
 def postvote(val):
         data_dict=eval(val)
+        cookie = data_dict.pop("cookie")
         pairs = list(data_dict.items())
         print(pairs)
         plain_string = ', '.join(f"{name}: {party}" for name, party in data_dict.items())
-        session['cookie'] = "check cookie"
+        session['cookie'] = cookie
         session['cookie_count'] = 1
         session['data_sent']=pairs
         print(val)
@@ -30,17 +31,19 @@ def postvote(val):
 @app.route("/castyourvote")
 def castyourvote():
         if "cookie" in session or request.cookies.get("authcheck"):
+            print("lets see if cookie is there or not ====>",'cookie' in session)
             if 'cookie' in session:
-                # print(session['data_sent'])
+                print(session['data_sent'],session['cookie'])
                 resp = make_response(render_template("vote.html",data=session['data_sent']))
                 resp.set_cookie("authcheck",session['cookie'],max_age=300)
                 session.pop('cookie')
             else:
                 response = requests.post("http://127.0.0.1:9000/retrieve",json={'cookie':request.cookies.get("authcheck")})
+                response = response.json()
                 if response['status'] == "not voted":
                     return render_template("vote.html",data=session['data_sent'])
                 else:
-                    return redirect(f'/red-casted/{response["cookie"]}')
+                    return redirect(f'/red-casted/{str(dict({"cookie":response["cookie"]}))}')
             return resp
         else:
              return redirect(url_for("vote"))
@@ -51,13 +54,18 @@ def red_casted(jai):
     dick = eval(jai)
     print(dick)
     session['cookie'] = dick['cookie']
-    
     return redirect(url_for("casted"))
+
+
 @app.route("/casted")
 def casted():
-    resp = make_response(render_template("voted.html"))
-    resp.set_cookie("authcheck",session['cookie'])
-    return resp
+    if 'cookie' in session:
+        resp = make_response(render_template("voted.html"))
+        resp.set_cookie("authcheck",session['cookie'],max_age=300)
+        session.pop("cookie")
+        return resp
+    else:
+         return render_template("voted.html")
 
 @app.route('/vote', methods=["GET","POST"])
 def vote():
@@ -70,7 +78,6 @@ def vote():
                 return redirect(resp.json().get("uri"))
                 
         if cook:
-                session['cookie'] = cook
                 return redirect(url_for('castyourvote'))
     
 
