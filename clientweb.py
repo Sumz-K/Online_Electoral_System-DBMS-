@@ -59,6 +59,7 @@ def red_casted(jai):
 
 @app.route("/casted")
 def casted():
+    # all the users can acces this page 
     if 'cookie' in session:
         resp = make_response(render_template("voted.html"))
         resp.set_cookie("authcheck",session['cookie'],max_age=300)
@@ -83,8 +84,15 @@ def vote():
 @app.route("/submit_vote", methods=["POST"])
 def submit_vote():
     data = request.form.get('voted_contestant')
-    print((eval(data))[0])
-    return (data)
+    cook = request.cookies.get("authcheck")
+    data_to_be_sent = {
+         "cookie":cook,
+         'candidate': data
+    }
+    resp = requests.post("http://127.0.0.1:9000/writevote",json=data_to_be_sent)
+    if resp.json()['status'] == 'OK':
+         return redirect(url_for('casted'))
+    return (resp.text)
 
 @app.route('/result')
 def result():

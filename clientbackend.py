@@ -80,6 +80,24 @@ def retrieve():
         return jsonify({"status":'Yes','cookie':val}),200
     
     
+@app.route("/writevote", methods=["POST"])
+def write():
+    data = request.get_json()
+    query = "select userid from cookie_jar where cookie = %s"
+    cursor.execute(query,(data['cookie'],))
+    uid = cursor.fetchall()
+    uid = uid[0][0]
+    cursor.execute("lock tables voted write,candidate write")
+    update_query = "UPDATE voted SET voting_status = %s WHERE user_id = %s"
+    cursor.execute(update_query, ("yes", uid))
+    cid = eval(data['candidate'])
+    update_query = "UPDATE candidate SET votes = votes+1 WHERE candidate_id = %s"
+    cursor.execute(update_query, (cid[1],))
+    mysql_conn.commit()
+    cursor.execute("unlock tables")
+    return jsonify({"status":"OK"}),200
+
+
 
 
 
