@@ -83,7 +83,8 @@ def vote():
 @app.route("/submit_vote", methods=["POST"])
 def submit_vote():
     data = request.form.get('voted_contestant')
-    return data
+    print((eval(data))[0])
+    return (data)
 
 @app.route('/result')
 def result():

@@ -23,7 +23,7 @@ def authtoken(data):
     json_data=json.loads(json_string)
     ward_num=(json_data['ward_no'])
 
-    query=f"select name,political_party from candidate where ward_num={ward_num};"
+    query=f"select name,political_party,candidate_id from candidate where ward_num={ward_num};"
     cursor.execute(query)
     res=cursor.fetchall()
     #print(res)
@@ -41,7 +41,7 @@ def authtoken(data):
         insert_cookie_query = "INSERT INTO cookie_jar (cookie, userid, ttl) VALUES (%s, %s, %s)"
         cursor.execute(insert_cookie_query, (cookie, json_data['uid'], ttl))
         cursor.execute("UNLOCK tables")
-        data_dict = {name: party for name, party in res}
+        data_dict = {name: [party,ids] for name, party,ids in res}
         data_dict["cookie"] = cookie
         final_str = json.dumps(data_dict)
         print((final_str))
@@ -52,7 +52,7 @@ def authtoken(data):
         insert_cookie_query = "INSERT INTO cookie_jar (cookie, userid, ttl) VALUES (%s, %s, %s)"
         cursor.execute(insert_cookie_query, (cookie, json_data['uid'], ttl))
         cursor.execute("UNLOCK tables")
-        data_dict = {name: party for name, party in res}
+        data_dict = {name: [party,ids] for name, party,ids in res}
         data_dict["cookie"] = cookie
         final_str = json.dumps(data_dict)
         print((final_str))

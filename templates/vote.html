@@ -11,7 +11,7 @@
         }
 
         .pair {
-            margin-bottom: 25px;
+            margin-bottom: 32px;
         }
 
         .page-container {
@@ -63,15 +63,15 @@
 
 <body>
     <center>
-        <form action="/submit_vote" method="post">
+        <form action="/submit_vote" method="post" style="margin-top: 100px;">
             {% for pair in data %}
             <div class="pair" >
                 <label>
                     <div class="page-container">
                         <label class="page-text" id="pair{{ loop.index }}">
-                            <input type="radio" name="voted_contestant" value="{{ pair[0] }}"
+                            <input type="radio" name="voted_contestant" value="{{ pair[0], pair[1][1]}}"
                                 onclick="enableSubmit('{{ loop.index }}')">
-                            <strong>Name:</strong> {{ pair[0] }},&nbsp; <strong>Party:</strong> {{ pair[1] }}
+                            <strong>Name:</strong> {{ pair[0] }},&nbsp; <strong>Party:</strong> {{ pair[1][0] }}
                         </label>
                     </div>
                 </label>
