@@ -11,8 +11,53 @@
         }
 
         .pair {
-            margin-bottom: 10px;
+            margin-bottom: 25px;
         }
+
+        .page-container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .page-text {
+            width: 1000px;
+            height: 80px;
+            font-size: 50px;
+            border-radius: 20px;
+            background-color: #a1eafb;
+            display: flex;
+            /* Added */
+            flex-direction: row;
+            /* Added */
+            align-items: center
+        }
+
+        input[type="radio"] {
+            transform: scale(2);
+            /* Adjust the scale factor as needed */
+            margin: 20px;
+            /* Add some spacing between the radio button and text */
+        }
+        .selected {
+            background-color: #FFCEF3 !important; /* Change to your desired color */
+        }
+        #submitBtn {
+        width: 200px; /* Adjust the width as needed */
+        height: 60px; /* Adjust the height as needed */
+        font-size: 32px;
+        background-color: #7DD076;
+        border-radius: 20px;
+    }
+    #submitBtn:disabled {
+            background-color: #999; /* Change to the desired color for disabled state */
+            color: #666; /* Change to the desired text color for disabled state */
+            pointer-events: none; 
+        }
+    #submitBtn:hover {
+        background-color: #096C47; /* Color on hover */
+        color: white;
+    }
     </style>
 </head>
 
@@ -20,16 +65,46 @@
     <center>
         <form action="/submit_vote" method="post">
             {% for pair in data %}
-            <div class="pair">
+            <div class="pair" >
                 <label>
-                    <input type="radio" name="voted_contestant" value="{{ pair[0] }}">
-                    <strong>Name:</strong> {{ pair[0] }}, <strong>Party:</strong> {{ pair[1] }}
+                    <div class="page-container">
+                        <label class="page-text" id="pair{{ loop.index }}">
+                            <input type="radio" name="voted_contestant" value="{{ pair[0] }}"
+                                onclick="enableSubmit('{{ loop.index }}')">
+                            <strong>Name:</strong> {{ pair[0] }},&nbsp; <strong>Party:</strong> {{ pair[1] }}
+                        </label>
+                    </div>
                 </label>
             </div>
             {% endfor %}
-            <input type="submit" value="Vote">
+            <input type="submit" value="Vote" id="submitBtn" disabled>
         </form>
     </center>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all radio buttons with the specified name
+            var radioButtons = document.querySelectorAll('input[name="voted_contestant"]');
+
+            // Check each radio button to see if it's checked
+            radioButtons.forEach(function (radioButton) {
+                if (radioButton.checked) {
+                    enableSubmit(radioButton)
+                }
+            });
+        });
+        function enableSubmit(pairNumber) {
+            var allElements = document.querySelectorAll('.page-text');
+            allElements.forEach(function (el) {
+                el.classList.remove('selected');
+            });
+
+            // Set color for the clicked element
+            var clickedElement = document.getElementById('pair' + pairNumber);
+            clickedElement.classList.add('selected')
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+        }
+    </script>
 </body>
 
 </html>
