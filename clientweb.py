@@ -1,3 +1,4 @@
+import re
 from flask import Flask, redirect, url_for,render_template,request,make_response,session,jsonify
 import requests
 app = Flask(__name__)
@@ -94,8 +95,24 @@ def submit_vote():
          return redirect(url_for('casted'))
     return (resp.text)
 
+
+import json
+
+def array_to_json(array):
+  """Converts a 2D array to a 2D JSON object."""
+  json_array = []
+  for row in array:
+    json_row = []
+    for element in row:
+      json_row.append(element)
+    json_array.append(json_row)
+  return json.dumps(json_array)
 @app.route('/result')
 def result():
-    return render_template("result.html")
+    res=requests.post("http://127.0.0.1:9000/showresult",json={})
+    r=res.text
+    r=eval(r)
+        
+    return render_template("showres.html",data=r)
 if __name__ == '__main__':
     app.run(debug=True,port=8080)
