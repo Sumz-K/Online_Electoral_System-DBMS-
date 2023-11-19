@@ -30,8 +30,13 @@ def login_page():
                 session["User_ID"] = data["UID"]
                 # print(requests.get(f"http://127.0.0.1:8000/printotp/{user_id}"))
                 return redirect(url_for("otp"))
+            elif response["status"] == "rate limit":
+                difference = -(datetime.datetime.now()-datetime.datetime.strptime(response["time"], '%a, %d %b %Y %H:%M:%S GMT'))
+                # Get the difference in minutes
+                difference_in_minutes = difference.total_seconds() / 60
+                return render_template("login.html",error=f"too many tries try after {round(difference_in_minutes,2)} minutes")
             else:
-                return render_template("login.html",error=" Invalid User ID")
+                return render_template("login.html",error=f"invalid user id")
                             
     return render_template("login.html",)
 
@@ -63,8 +68,10 @@ def otp():
             response = resp.json()
             if response['status'] == "accepted":
                 return redirect(response['endpoint'])
-            else:
+            elif response['status'] == "rejected":
                 return render_template("otp.html",error=" Invalid OTP")
+            else:
+                return redirect(url_for("login_page"))
     return render_template("otp.html")
 
 
