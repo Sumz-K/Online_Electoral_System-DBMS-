@@ -7,7 +7,7 @@ from datetime import datetime,timedelta
 app = Flask(__name__)
 app.secret_key = "pass"
 mysql_conn = mysql.connector.connect(
-    host = "10.20.205.52",
+    host = "192.168.0.107",
     user = "ubuntu",
     password = "pass"
 )
@@ -113,7 +113,16 @@ def showres():
     return cursor.fetchall()
 
 
-
-
+@app.route("/warnumber",methods=["POST"])
+def ward():
+    data = request.get_json()
+    print(data)
+    q = "select name, votes from candidate where ward_num = (%s) order by votes desc"
+    val = (data['warnumber'],)
+    cursor.execute(q,val)
+    val = cursor.fetchall()
+    if len(val)==0:
+        return jsonify({"status":"invalid ward number"}),200
+    return val
 if __name__ == '__main__':
     app.run(debug=True, port=9000)

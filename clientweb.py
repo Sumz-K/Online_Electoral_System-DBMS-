@@ -112,7 +112,19 @@ def result():
     res=requests.post("http://127.0.0.1:9000/showresult",json={})
     r=res.text
     r=eval(r)
-        
+    session['results'] = r
     return render_template("showres.html",data=r)
+@app.route("/selective",methods=["post"])
+def select():
+     data = request.form.get("searchbar")
+     wardnumber = data
+     res = requests.post("http://127.0.0.1:9000/warnumber",json={"warnumber":data})
+     r = res.text
+     check = res.json()
+     if "status" in check:
+          return render_template("showres.html",error="No such Ward Number Found!",data=session['results'])
+     print(r)
+     r = eval(r)
+     return render_template("wardnumber.html",data = r,wardnumber=wardnumber)
 if __name__ == '__main__':
     app.run(debug=True,port=8080)

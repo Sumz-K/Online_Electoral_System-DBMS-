@@ -1,95 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Election Results</title>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				margin: 0;
-				padding: 0;
-			}
+    h1 {
+      text-align: center;
+    }
 
-			#search-container {
-				text-align: center;
-				margin-top: 50px;
-			}
+    table {
+      width: 60%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center; /* Center-align table content */
+    }
 
-			#searchbar {
-				width: 250px;
-				height: 30px;
-				border: 1px solid #ccc;
-				padding: 5px;
-				border-radius: 20px;
-				font-size: 16px;
-			}
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center; /* Center-align table content */
+    }
 
-			#searchbutton {
-				width: 100px;
-				height: 40px;
-				border: none;
-				background-color: #007bff;
-				color: white;
-				border-radius: 20px;
-				cursor: pointer;
-				font-size: 16px;
-				margin-left: 10px;
-			}
+    th {
+      background-color: #f2f2f2;
+    }
 
-			table {
-				width: 80%;
-				margin: 20px auto;
-				border-collapse: collapse;
-			}
+    tr:nth-child(2) {
+      background-color: #8BC34A; /* Green color for the second row */
+      color: white;
+    }
 
-			th,
-			td {
-				border: 1px solid #ccc;
-				padding: 8px;
-				text-align: left;
-			}
-
-			th {
-				background-color: #f2f2f2;
-			}
-
-			h1 {
-				margin: 30px;
-				text-align: center;
-			}
-			input[type="number"]::-webkit-outer-spin-button,
-			input[type="number"]::-webkit-inner-spin-button {
-				-webkit-appearance: none;
-				margin: 0;
-
-			}
-
-			input[type="number"] {
-				-moz-appearance: textfield;
-
-			}
-
-			center {
-				display: block;
-				margin: auto;
-				text-align: center;
-			}
-			.no-arrows input[type="number"]::-webkit-outer-spin-button,
-			.no-arrows input[type="number"]::-webkit-inner-spin-button {
-				-webkit-appearance: none;
-				margin: 0;
-			}
-
-			.no-arrows input[type="number"] {
-				-moz-appearance: textfield;
-			}
-		</style>
-    <link href="{{ url_for('static', filename='client.css') }}" rel="stylesheet" />
-	</head>
-	<body>
-    <header data-thq="thq-navbar" class="home-navbar-interactive">
+    center {
+      display: block;
+      margin: auto;
+      text-align: center;
+    }
+  </style>
+  <link href="{{ url_for('static', filename='client.css') }}" rel="stylesheet" />
+</head>
+<body>
+      <header data-thq="thq-navbar" class="home-navbar-interactive">
       <div data-thq="thq-navbar-nav" class="home-desktop-menu">
         <nav class="home-links">
           <a href="{{ url_for('vote') }}" class="home-text">VOTE</a>
@@ -157,45 +111,21 @@
     style="width: 60px;height: 60px;"
     class="home-video">
 </lord-icon></a>
-		<center>
-			<div id="search-container">
-				<form action="/selective" method="POST">
-					<input
-						type="number"
-						id="searchbar"
-						name="searchbar"
-						class="no-arrows"
-						placeholder="Search..."
-					/>
-
-					<button type="submit" id="searchbutton">Search</button>
-				</form>
-			</div>
-			<div>
-			{% if error %}
-
-            <p>{{ error }}</p>
-            {% endif %}
-			</div>
-		</center>
-
-		<center>
-			<h1>Winners</h1>
-
-			<table>
-				<tr>
-					<th>Location</th>
-					<th>Party</th>
-					<th>Candidate</th>
-				</tr>
-				{% for row in data %}
-				<tr>
-					<td>{{ row[0] }}</td>
-					<td>{{ row[1] }}</td>
-					<td>{{ row[2] }}</td>
-				</tr>
-				{% endfor %}
-			</table>
-		</center>
-	</body>
+  <center>
+    <h1>Ward number {{wardnumber}}'s vote counts</h1>
+    
+    <table>
+      <tr>
+        <th>Candidate</th>
+        <th>Votes</th>
+      </tr>
+      {% for row in data %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </center>
+</body>
 </html>
