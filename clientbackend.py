@@ -7,7 +7,7 @@ from datetime import datetime,timedelta
 app = Flask(__name__)
 app.secret_key = "pass"
 mysql_conn = mysql.connector.connect(
-    host = "10.20.205.52",
+    host = "10.20.202.132",
     user = "ubuntu",
     password = "pass"
 )

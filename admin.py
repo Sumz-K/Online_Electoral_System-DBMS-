@@ -12,7 +12,7 @@ import datetime
 
 app=Flask(__name__)
 mysql_conn = mysql.connector.connect(
-    host = "10.20.205.52",
+    host = "10.20.202.132",
     user = "ubuntu",
     password = "pass"
 )
@@ -43,7 +43,6 @@ def adminmain():
 
 @app.route("/release_results",methods=['GET','POST'])
 def release():
-
     if request.method=='POST':
         for i in lst:
             query=f"select c.name,co.name as const_name,political_party from candidate c join constituency co where c.ward_num=co.ward_num and c.ward_num={i} and votes=(select max(votes) from contestants.candidate where ward_num={i});"
@@ -59,6 +58,15 @@ def release():
             cursor.execute(query_new,vals)
             mysql_conn.commit()
     return "Done"
+@app.route("/deletecandidate",methods=['DELETE','POST'])
+def deletecan():
+    if request.method=='POST':
+        cand_id=request.form.get("candidate_id")
+        query="delete from candidate where candidate_id=(%s)"
+        value=(cand_id,)
+        cursor.execute(query,value)
+        mysql_conn.commit()
+        return f"Candidate with UID {cand_id} deleted",201
         
 
 
