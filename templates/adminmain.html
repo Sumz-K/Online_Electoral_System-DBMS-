@@ -1,11 +1,87 @@
-<html>
-    <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Election Results</title>
 
-    </head>
-    <body>
-        <form action="/release_results" method="post">
-            <button type="submit">Release votes</button>
+  <style>
+    /* Split the screen vertically into two parts */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-        </form>
-    </body>
+    .left-pane {
+      flex: 1;
+     
+      text-align: center;
+    }
+
+    .right-pane {
+      flex: 1;
+      
+      text-align: center;
+    }
+
+    /* Center align the buttons */
+    .button-container {
+      text-align: center;
+    }
+
+    .button-delete {
+      padding-top: 10%;
+    }
+
+    /* Style the "Release votes" button */
+    button.release-votes {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    /* Style the "Delete candidate" button */
+    button.delete-candidate {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px;
+      
+    }
+  </style>
+
+  <script>
+    // Enable the "Delete candidate" button only when there is an entry in the input field
+    document.getElementById('candidate_id').addEventListener('input', function() {
+      if (this.value) {
+        document.getElementById('delete-candidate').style.display = 'inline-block';
+      } else {
+        document.getElementById('delete-candidate').style.display = 'none';
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="left-pane">
+    <form action="/release_results" method="post">
+      <button type="submit" class="release-votes">Release votes</button>
+    </form>
+  </div>
+  <div class="right-pane">
+    <div class="button-delete">
+      <form action="/deletecandidate" method="post">
+        Enter candidate id to be deleted:<br>
+        <input name="candidate_id" type="number" id="candidate_id"><br>
+        <button type="submit" id="delete-candidate" class="delete-candidate">Delete candidate</button>
+      </form>
+    </div>
+  </div>
+</body>
 </html>

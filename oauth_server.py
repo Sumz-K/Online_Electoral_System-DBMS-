@@ -30,7 +30,7 @@ def remove():
         thread_cursor.execute("LOCK TABLES otp write")
         try:
             current = datetime.datetime.now()
-            thread_cursor.execute(f"DELETE FROM otp WHERE ttl < '{current}'")
+            thread_cursor.execute(f"DELETE FROM otp WHERE ttl < '{current}' or count > 6")
             mysql_conn.commit()
         except mysql.connector.Error as err:
             # Handle errors, print or log them as needed
@@ -62,10 +62,15 @@ def gettokens():
     cursor.execute(q,v)
     see = cursor.fetchall()
     print(see)
+    
     if len(see) != 0:
+        if see[0][-1] > datetime.datetime.now():
+            ret = {"status":"rate limit",
+               "time": see[0][-1]}
+            return jsonify(ret),200
         cursor.execute("LOCK TABLES OTP WRITE")
-        query = 'insert into otp values(%s,%s,%s)'
-        values = (uid,random.randint(1000,9999),str(cur_time+datetime.timedelta(minutes=3))[:19])
+        query = 'insert into otp values(%s,%s,%s,%s,%s)'
+        values = (uid,random.randint(1000,9999),str(cur_time+datetime.timedelta(minutes=3))[:19],0,0)
         cursor.execute(query,values)
         mysql_conn.commit()
         cursor.execute("UNLOCK TABLES")
@@ -90,8 +95,11 @@ def otp_check():
     val = (uid,)
     cursor.execute(query,val)
     val = cursor.fetchall()
+    cursor.execute("lock tables otp write")
+    cursor.execute("UPDATE otp SET count = count + 1 WHERE id = %s",(uid,))
+    cursor.execute("unlock tables")
     compare(val)
-    print(val,type(val[0]))
+    # print(val,type(val[0]))
 
     if int(data['otp']) in val:
         key = data['endp']
@@ -108,9 +116,9 @@ def otp_check():
             "dob" : str(res[0][2]),
             "ward_no" : res[0][3]
         }
-
-        
         return jsonify({"status":"accepted", 'endpoint':endpoint[0][0]+f"/{str(return_data)}"}),200
+    elif len(val) == 0:
+        return jsonify({"status":"rate limit"}),200
     return jsonify({"status":"rejected"}),200
 
 

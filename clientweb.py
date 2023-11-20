@@ -52,9 +52,9 @@ def castyourvote():
 
 @app.route("/red-casted/<jai>")
 def red_casted(jai):
-    dick = eval(jai)
-    print(dick)
-    session['cookie'] = dick['cookie']
+    dictt = eval(jai)
+    print(dictt)
+    session['cookie'] = dictt['cookie']
     return redirect(url_for("casted"))
 
 
