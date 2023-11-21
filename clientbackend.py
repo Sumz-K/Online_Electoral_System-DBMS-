@@ -7,7 +7,7 @@ from datetime import datetime,timedelta
 app = Flask(__name__)
 app.secret_key = "pass"
 mysql_conn = mysql.connector.connect(
-    host = "192.168.0.107",
+    host = "172.20.10.4",
     user = "ubuntu",
     password = "pass"
 )
@@ -103,7 +103,7 @@ def write():
 
 @app.route("/setsession",methods=["POST"])
 def setss():
-    data = requests.get_json()
+    data = request.get_json()
     print(data)
     return jsonify({'uri':"http://127.0.0.1:5000/login/API_key1"}),200
 

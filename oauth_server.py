@@ -12,7 +12,7 @@ import datetime
 
 app=Flask(__name__)
 mysql_conn = mysql.connector.connect(
-    host = "192.168.0.107",
+    host = "172.20.10.4",
     user = "ubuntu",
     password = "pass"
 )
