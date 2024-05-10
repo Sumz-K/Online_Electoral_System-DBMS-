@@ -5,7 +5,7 @@ import json
 import hashlib
 from datetime import datetime,timedelta
 app = Flask(__name__)
-app.secret_key = "pass"
+app.secret_key = "pass" 
 mysql_conn = mysql.connector.connect(
     host = "192.168.0.107",
     user = "ubuntu",
